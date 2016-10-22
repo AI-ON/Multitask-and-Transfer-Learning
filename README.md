@@ -1,4 +1,4 @@
-# AI Open Network Sample Project
+# AI Open Network Sample Research Project
 
 ## (Title) Project X: Social media botnet detection and analysis
 
