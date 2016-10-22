@@ -47,7 +47,7 @@ For example:
 * Company A, API: (Limit on 100 calls per minutes) Link to the API documentation
 * Open Dataset: (10 Gb), Link to a paper about the dataset if possible, if not then some project that uses the dataset.
 
-* Another suggested format by *[*Megan Risdal](#kaggle)*:
+* Another suggested format by *[Megan Risdal](#kaggle)*:
   * The context: How was the data collected and why?
   * Contents: What fields are in your data? What are their units of measurement? Are there missing values or other recording flaws?
   * Goals: Do you have any objectives in mind in making your data open?
