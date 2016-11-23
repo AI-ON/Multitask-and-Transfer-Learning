@@ -38,6 +38,11 @@ This is a more in depth explanation into the problem from the previous section:
 
 Essentially, this can be a convincing point for other researchers with common interest to join.
 
+## How to measure success:
+
+* Given the dataset and disucssed approaches, what could be a good measure of good result.
+* Or perhaps include benchmarks to compare against and improve up-on.
+
 ## Datasets:
 
 The more data resources, the better!
