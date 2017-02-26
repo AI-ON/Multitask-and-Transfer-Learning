@@ -37,9 +37,15 @@ Remember this is just a starting point, if you think the paper is saying somethi
 4. Biological plausibility
   - Gut feeling, what is the chance the brain is doing something along these lines?
   - If you don't think it's biologically plausible, does that matter?
+5. Paper bonus points
+  - [ ] Model-based RL
+  - [ ] Attention
+  - [ ] Meta-learning
+  - [ ] Online / continuous learning
+  - [ ] Tests on Atari
+  - [ ] Improves representations
 
 ## Notes on the rubric
-
 The items on transfer and multitask learning are self-explanatory, they're the reason we're reading the paper, so relevance to the task at hand is important to keep in mind. But some of the other items may require some further explanation:
 
 ### Adaptability to the problem domain
@@ -82,3 +88,8 @@ I'm thinking in particular of adversarial networks.
 It's unlikely that an individual brain has anything like a GAN inside it, but we'd be foolish to write off adversarial techniques as useless to us.
 
 So, use your best judgement here, it's inherently subjective, but a good thing to keep in mind.
+
+### Paper bonus points
+
+These are binary yes/no attributes about the paper that can give others a quick sense of the kind of paper it is.
+No need to go into long descriptions for these, just check any boxes that are relevant.
