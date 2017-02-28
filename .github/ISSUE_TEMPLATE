@@ -1,0 +1,27 @@
+<!--
+If you're doing a paper review, try to touch on these points:
+
+1. Relevance to transfer learning
+  - How likely is it that this paper improves knowledge transfer between different tasks?
+  - What is the potential magnitude of the improvement?
+2. Relevance to multitask learning
+  - How likely is it that this paper reduces forgetting across multiple tasks?
+  - What is the potential magnitude of the improvement?
+3. Adaptability to the problem domain
+  - How would the techniques described in the paper be used in an RL agent?
+4. Biological plausibility
+  - Gut feeling, what is the chance the brain is doing something along these lines?
+  - If you don't think it's biologically plausible, does that matter?
+5. Paper bonus points
+  - [ ] Model-based RL
+  - [ ] Attention
+  - [ ] Meta-learning
+  - [ ] Online / continuous learning
+  - [ ] Tests on Atari
+  - [ ] Improves representations
+
+If it's too much stuff, just do your best! The more detailed the review, the better it helps the community decide if the paper is relevant or not.
+
+See this for a full explanation: https://github.com/AI-ON/Multitask-and-Transfer-Learning/blob/master/paper-reviews.md
+
+-->
