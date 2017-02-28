@@ -1,20 +1,38 @@
 # Multitask and Transfer Learning
 
-
 * Benchmark and build RL architectures that can do multitask and transfer learning.
 * Date: December 2016
 * Category: Fundamental Research
 * Contact: deontologician@gmail.com
 
-## Project Status:
-
-* Currently in the early stages of writing the benchmark for measuring performance.
-* Check the ReadME in [AMTLB](./AMTLB) directory to learn more about the tool/ library used.
-  - *"This is a library to test how a reinforcement learning architecture performs on all Atari games in OpenAI's gym. It performs two kinds of tests, one for transfer learning and one for multitask learning."*
-
 ## Community Links:
 
 [![Join the chat at https://gitter.im/ai-open-network/multitask_and_transfer_learning](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ai-open-network/multitask_and_transfer_learning)
+
+## Contributing
+
+We have a few different "threads" going on right now, so there are several different ways you can get involved if you're interested:
+* [Reviewing relevant papers and summarizing for the community](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/4)
+  - There are lots of papers coming out in this area and it's hard to keep on top of all of them!
+  - Check out the [review rubric](./paper-reviews.md)
+* [Replicating existing RL architectures on the benchmarks](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/3)
+  - If you're new to machine learning / RL, this might be a good place to start, since you're reimplementing existing architectures.
+  - We want to see what numbers current state-of-the-art architectures get on the benchmark, so this is important for measuring how well we're doing.
+* [Design & implement novel architectures](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/5)
+  - This is the ultimate goal of the project. We're still in the preliminary stages, but if you have an idea you're itching to try, feel free to dive in.
+  - We're always game to chat with you about ideas in the [gitter channel](https://gitter.im/ai-open-network/multitask_and_transfer_learning)
+* [Building and testing the benchmarks](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/1)
+  - This is mainly python coding, rather than ML, but if you're interested, contact @deontologician
+* If none of these sound appealing, but you still feel like you want to get involved somehow, come chat with us in the [gitter channel](https://gitter.im/ai-open-network/multitask_and_transfer_learning)
+
+
+## Project Status:
+
+* Currently writing and testing the benchmarks for measuring performance.
+* Looking for people to review papers trawling for ideas, and to implement some existing architectures to benchmark their performance.
+* See detailed status on the [project tracker](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects)
+* Check the README in [AMTLB](./AMTLB) directory to learn more about the tool/ library used.
+  - *"This is a library to test how a reinforcement learning architecture performs on all Atari games in OpenAI's gym. It performs two kinds of tests, one for transfer learning and one for multitask learning."*
 
 ## Problem description:
 
@@ -28,7 +46,6 @@ Second, design and implement deep reinforcement learning architectures that do w
 Generalizing across tasks is a crucial component of human intelligence. Current deep RL architectures get less effective the more tasks they are put to, whereas for humans, diversity of experience is a strength that improves performance on new tasks. Overcoming catastrophic forgetting and achieving one-shot learning are abilities that should fall out naturally if this task is solved convincingly.
 
 At a more meta-level, this problem is both out of reach of current reinforcement learning architectures, but it seems reasonably within reach within a year or two. Much like ImageNet spurred innovation by creating a common target for researchers to aim for, this project could similarly provide a common idea of success for multitask and transfer learning. Many papers researching multi-task and transfer learning using Atari are doing it in ad-hoc ways that cherry-pick games that get good results.
-
 
 ## How to measure success:
 
@@ -109,18 +126,6 @@ target for testing out RL architectures
 - [Reinforcement Learning with Unsupervised Auxiliary Tasks](https://arxiv.org/abs/1611.05397v1)
 
 *Note: More Work to be added to, always check the chat for latest related work for now*
-
-
-## Contribute:
-
-Few things to have in here:
-
-* Provide a starting point readme file and status of the current project for new researchers. These projects can take months if not longer sometimes to complete, such information will help onboarding faster.
-* Guideline on how to edit-add new resources to this project, if there is a specific requirement, mention them. i.e:
-  - Please create a branch and do a pull-request when adding to this example project.
-  - Open Issues if something is not clear in the readme, or found linguistic/ grammar mistakes.
-
-
 
 
 **PS: Last few notes:**
