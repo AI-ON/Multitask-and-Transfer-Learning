@@ -4,15 +4,19 @@
 * Date: December 2016
 * Category: Fundamental Research
 * Contact: deontologician@gmail.com
+* [![Join the chat at https://gitter.im/ai-open-network/multitask_and_transfer_learning](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ai-open-network/multitask_and_transfer_learning)
 
-[![Join the chat at https://gitter.im/ai-open-network/multitask_and_transfer_learning](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ai-open-network/multitask_and_transfer_learning)
+## Problem description
 
-## Problem description:
+1. Create a benchmark for transfer learning and multitask learning.
+    * Should measure improvement in learning that is directly attributable to knowledge transfer between games.
+    * Should also be able to measure performance by a single agent on multiple games.
+    * Should use cross-validation to mitigate the effects of a small number of games to test on.
 
-First, create a benchmark for multi task learning and transfer learning. The benchmark should measure improvement in learning that is directly attributable to knowledge transfer between games. The benchmark should also be able to measure performance by a single agent on multiple games. The benchmark should use cross-validation to mitigate the effects of a small sample size of games.
 
-Second, design and implement deep reinforcement learning architectures that do well on the benchmark. For methodological reasons, we think it's important to design the ideal benchmark before getting too attached to a particular architecture. It's important that we're sure the benchmark is measuring the crux of the transfer and multi-task problem rather than measuring something our architecture is good at.
-
+2. Design and implement deep reinforcement learning architectures that do well on the benchmark.
+   * For methodological reasons, we think it's important to design the ideal benchmark before getting too attached to a particular architecture.
+   * It's important that we're sure the benchmark is measuring the crux of the transfer and multi-task problem rather than measuring something our architecture is good at.
 
 ## Contributing
 
