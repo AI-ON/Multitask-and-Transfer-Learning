@@ -9,7 +9,7 @@ from collections import defaultdict
 
 import gym
 
-from common import Agent, RandomAgent, GAME_NAMES, NUM_GAMES, BenchmarkParms
+from common import Agent, RandomAgent, BenchmarkParms
 
 
 def fold_name(num):

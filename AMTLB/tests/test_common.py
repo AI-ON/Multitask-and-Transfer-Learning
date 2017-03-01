@@ -33,6 +33,7 @@ def random_benchmark_parms(game_names):
         max_rounds_w_no_reward=randint(0, 1000),
         seed=randint(0, 10000),
         game_names=game_names,
+        game_version=randint(0, 3),
     )
 
 @pytest.fixture
@@ -67,7 +68,7 @@ class TestBenchmarkParms(object):
         all_games_in_folds = set()
         for fold in bp.folds:
             all_games_in_folds.update(set(fold))
-        assert set(game_names) == all_games_in_folds
+        assert set(map(amtlb.to_identifier, game_names)) == all_games_in_folds
 
     def test_save_parms(self, random_benchmark_parms, random_filename):
         bp = random_benchmark_parms()
@@ -80,7 +81,8 @@ class TestBenchmarkParms(object):
         assert j.pop('max_rounds_w_no_reward') == bp.max_rounds_w_no_reward
         assert j.pop('seed') == bp.seed
         assert j.pop('max_rounds_per_game') == bp.max_rounds_per_game
-        assert j.pop('game_names') == bp.game_names
+        assert j.pop('games') == bp.games
+        assert j.pop('game_version') == bp.game_version
         assert folds_equal(j.pop('folds'), bp.folds)
         assert not j
 
@@ -91,7 +93,8 @@ class TestBenchmarkParms(object):
             "max_rounds_w_no_reward": bp.max_rounds_w_no_reward,
             "seed": bp.seed,
             "max_rounds_per_game": bp.max_rounds_per_game,
-            "game_names": bp.game_names,
+            "games": bp.games,
+            "game_version": bp.game_version,
             "folds": bp.folds,
         }
         with open(random_filename, 'w') as fileobj:
@@ -104,4 +107,10 @@ class TestBenchmarkParms(object):
         assert bp.seed == bp2.seed
         assert bp.max_rounds_per_game == bp2.max_rounds_per_game
         assert bp.game_names == bp2.game_names
+        assert bp.game_identifiers == bp2.game_identifiers
         assert folds_equal(bp.folds, bp2.folds)
+
+def test_to_identifier():
+    expected = 'FooGameBar-v3'
+    result = amtlb.to_identifier('foo_game_bar', version=3)
+    assert result == expected
