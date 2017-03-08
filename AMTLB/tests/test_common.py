@@ -6,45 +6,10 @@ import os.path
 
 import pytest
 from mock import MagicMock, patch
-
 import amtlb
 
+from conftest import folds_equal
 
-@pytest.fixture
-def game_names():
-    return list(sample(uppercase, randint(14, 26)))
-
-@pytest.fixture(params=[1, 3, 5, 7, 11, 13])
-def num_folds(request):
-    return request.param
-
-@pytest.fixture
-def benchmark_parms(game_names, num_folds):
-    return partial(
-        amtlb.BenchmarkParms,
-        game_names=game_names,
-        num_folds=num_folds,
-    )
-
-@pytest.fixture
-def random_benchmark_parms(game_names):
-    return partial(amtlb.BenchmarkParms,
-        num_folds=randint(0, 11),
-        max_rounds_w_no_reward=randint(0, 1000),
-        seed=randint(0, 10000),
-        game_names=game_names,
-        game_version=randint(0, 3),
-    )
-
-@pytest.fixture
-def random_filename(tmpdir):
-    return os.path.join(str(tmpdir), ''.join(sample(lowercase, 10)))
-
-
-def folds_equal(A, B):
-    _A = {frozenset(a) for a in A}
-    _B = {frozenset(b) for b in B}
-    return _A == _B
 
 class TestBenchmarkParms(object):
 
@@ -106,9 +71,10 @@ class TestBenchmarkParms(object):
         assert bp.max_rounds_w_no_reward == bp2.max_rounds_w_no_reward
         assert bp.seed == bp2.seed
         assert bp.max_rounds_per_game == bp2.max_rounds_per_game
-        assert bp.game_names == bp2.game_names
-        assert bp.game_identifiers == bp2.game_identifiers
+        assert sorted(bp.game_names) == sorted(bp2.game_names)
+        assert sorted(bp.game_identifiers) == sorted(bp2.game_identifiers)
         assert folds_equal(bp.folds, bp2.folds)
+
 
 def test_to_identifier():
     expected = 'FooGameBar-v3'

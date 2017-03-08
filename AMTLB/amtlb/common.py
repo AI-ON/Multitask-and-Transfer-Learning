@@ -84,11 +84,23 @@ class BenchmarkParms(object):
                  game_names=GAMES,
                  game_version=0,
                  ):
+        assert num_folds > 1, 'Must have more than one fold'
         self.num_folds = num_folds
+
+        assert max_rounds_w_no_reward > 1, \
+            'Max rounds with no reward must be greater than 1'
         self.max_rounds_w_no_reward = max_rounds_w_no_reward
+
+        assert seed is None or isinstance(seed, int)
         self.seed = random.randint(0, 2**64-1) if seed is None else seed
+
+        assert max_rounds_per_game > 1, 'Must have at least one round per game'
         self.max_rounds_per_game = max_rounds_per_game
+
+        assert 0 <= game_version <= 3, 'Invalid game version'
         self.game_version = game_version
+
+        assert len(game_names) > num_folds, 'Must have more games than folds'
         self.games = {game: to_identifier(game, game_version)
                       for game in game_names}
 

@@ -19,7 +19,7 @@ def fold_name(num):
     return name
 
 
-class BenchmarkResult(object):
+class TransferBenchmarkResult(object):
     def __init__(self, agent, game=None):
         self.agent = agent
         self.rewards = []  # list of int rewards, index is round #
@@ -50,12 +50,12 @@ class EnvMaker(object):
         return env
 
 
-class TestRun(EnvMaker):
+class TransferTestRun(EnvMaker):
     def __init__(self, agent, game_name, parms):
         self.agent = agent
         self.parms = parms
         self.game = self.create_env(game_name)
-        self.result = BenchmarkResult(agent, game_name)
+        self.result = TransferBenchmarkResult(agent, game_name)
 
     def __call__(self):
         '''Test an agent on the given game'''
@@ -162,10 +162,10 @@ class TransferBenchmark(object):
                 self.game_agents[game_name] = game_agent
 
     def test(self, game_agent, game_name):
-        return TestRun(game_agent, game_name, self.parms)()
+        return TransferTestRun(game_agent, game_name, self.parms)()
 
     def train(self, fold_agent, training_set):
-        return TrainingRun(fold_agent, training_set, self.parms)()
+        return TransferTrainingRun(fold_agent, training_set, self.parms)()
 
 
     def do_folds(self):
@@ -192,7 +192,7 @@ class TransferBenchmark(object):
                     self.tested_agent_filename(fold_num, game_name))
 
 
-class TrainingRun(EnvMaker):
+class TransferTrainingRun(EnvMaker):
     def __init__(self, agent, training_set, parms):
         self.agent = agent
         self.training_set = training_set
@@ -200,7 +200,7 @@ class TrainingRun(EnvMaker):
         self.envs = defaultdict(self.create_env)
         self.game_rounds_left = {game: self.max_test_game_rounds
                                  for game in training_set}
-        self.trace_result = BenchmarkResult(agent)
+        self.trace_result = TransferBenchmarkResult(agent)
 
     def total_rounds_left(self):
         return sum(self.game_rounds_left.values())
@@ -221,9 +221,6 @@ class TrainingRun(EnvMaker):
             if cumulative_sum >= threshold:
                 break
         return game, self.envs[game]  # Will lazily initialize env
-
-    def keep_playing(self, game_name, done, no_reward_turns):
-        return
 
     def __call__(self):
         round = 0
