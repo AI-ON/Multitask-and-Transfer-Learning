@@ -222,9 +222,6 @@ class TrainingRun(EnvMaker):
                 break
         return game, self.envs[game]  # Will lazily initialize env
 
-    def keep_playing(self, game_name, done, no_reward_turns):
-        return
-
     def __call__(self):
         round = 0
         while self.total_rounds_left() > 0:
