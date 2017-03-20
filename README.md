@@ -4,36 +4,50 @@
 * Date: December 2016
 * Category: Fundamental Research
 * Contact: deontologician@gmail.com
-* [![Join the chat at https://gitter.im/ai-open-network/multitask_and_transfer_learning](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ai-open-network/multitask_and_transfer_learning)
-
+* [![Join the chat at https://gitter.im/ai-open-network/multitask_and_transfer_learning](https://badges.gitter.im/Join%20Chat.svg)][gitter]
 ## Problem description
 
 1. Create a benchmark for transfer learning and multitask learning.
     * Should measure improvement in learning that is directly attributable to knowledge transfer between games.
     * Should also be able to measure performance by a single agent on multiple games.
     * Should use cross-validation to mitigate the effects of a small number of games to test on.
-
-
 2. Design and implement deep reinforcement learning architectures that do well on the benchmark.
-   * For methodological reasons, we think it's important to design the ideal benchmark before getting too attached to a particular architecture.
-   * It's important that we're sure the benchmark is measuring the crux of the transfer and multi-task problem rather than measuring something our architecture is good at.
+    * For methodological reasons, we think it's important to design the ideal benchmark before getting too attached to a particular architecture.
+    * It's important that we're sure the benchmark is measuring the crux of the transfer and multi-task problem rather than measuring something our architecture is good at.
 
 ## Contributing
 
 We have a few different "threads" going on right now, so there are several different ways you can get involved if you're interested:
-* [Reviewing relevant papers and summarizing for the community](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/4)
+* [Reviewing relevant papers and summarizing for the community][papers project]
   - There are lots of papers coming out in this area and it's hard to keep on top of all of them!
-  - Check out the [review rubric](./paper-reviews.md)
-* [Replicating existing RL architectures on the benchmarks](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/3)
+  - Check out the [review rubric]
+* [Replicating existing RL architectures on the benchmarks][replication project]
   - If you're new to machine learning / RL, this might be a good place to start, since you're reimplementing existing architectures.
   - We want to see what numbers current state-of-the-art architectures get on the benchmark, so this is important for measuring how well we're doing.
-* [Design & implement novel architectures](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/5)
+* [Design & implement novel architectures][architectures project]
   - This is the ultimate goal of the project. We're still in the preliminary stages, but if you have an idea you're itching to try, feel free to dive in.
-  - We're always game to chat with you about ideas in the [gitter channel](https://gitter.im/ai-open-network/multitask_and_transfer_learning)
-* [Building and testing the benchmarks](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/1)
+  - We're always game to chat with you about ideas in the [gitter channel][gitter]
+* [Building and testing the benchmarks][benchmark project]
   - This is mainly python coding, rather than ML, but if you're interested, contact @deontologician
-* If none of these sound appealing, but you still feel like you want to get involved somehow, come chat with us in the [gitter channel](https://gitter.im/ai-open-network/multitask_and_transfer_learning)
+* If none of these sound appealing, but you still feel like you want to get involved somehow, come chat with us in the [gitter channel][gitter]
 
+[architectures project]: https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/5
+[benchmark project]: https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/1
+[replication project]: https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/3
+[papers project]: https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects/4
+[review rubric]: ./paper-reviews.md
+
+### A few notes on contributing
+
+* **Be Kind** and **Be Respectful**
+* Value other people's work: please reference them. This also helps other people in the project find valuable prior work. Don't just copy & paste what you find elsewhere when it comes to sharing information.
+* Give constructive criticism. If you see something not working or wrong, [open an issue][new issue], or bring it up in the [chat][gitter]. Any ideas, practices, project direction or code are all open to any criticism. Try to avoid criticizing people or making things personal, but feel free to criticize code, ideas, project direction constructively. If you come with a proposed solution in hand, all the better!
+* Please Ask Questions! An important part of this project is to open up the opportunity for everyone to contribute. We want anyone who wants to to be able to add value towards these research topics.
+* Keep in mind that most of the researchers that are opening these projects have full-time work/research. If there is a specific question, use the [gitter channel][gitter] or [open an issue][new issue] rather than directly emailing them.
+
+[gitter]: https://gitter.im/ai-open-network/multitask_and_transfer_learning
+[issues]: https://github.com/AI-ON/Multitask-and-Transfer-Learning/issues
+[new issue]: https://github.com/AI-ON/Multitask-and-Transfer-Learning/issues/new
 
 ## Project Status:
 
@@ -41,9 +55,10 @@ We have a few different "threads" going on right now, so there are several diffe
 
 * Currently writing and testing the benchmarks for measuring performance.
 * Looking for people to review papers trawling for ideas, and to implement some existing architectures to benchmark their performance.
-* Check the README in [AMTLB](./AMTLB) directory to learn more about the tool/ library used.
+* Check the README in [AMTLB] directory to learn more about the tool/ library used.
   - *"This is a library to test how a reinforcement learning architecture performs on all Atari games in OpenAI's gym. It performs two kinds of tests, one for transfer learning and one for multitask learning."*
 
+[AMTLB]: ./AMTLB
 
 ## Why this problem matters:
 
@@ -52,7 +67,6 @@ Generalizing across tasks is a crucial component of human intelligence. Current 
 At a more meta-level, this problem is both out of reach of current reinforcement learning architectures, but it seems reasonably within reach within a year or two. Much like ImageNet spurred innovation by creating a common target for researchers to aim for, this project could similarly provide a common idea of success for multitask and transfer learning. Many papers researching multi-task and transfer learning using Atari are doing it in ad-hoc ways that cherry-pick games that get good results.
 
 ## How to measure success:
-
 
 Success is in degrees, since an architecture (in principle) could surpass human
 ability in multi-task Atari, getting both higher scores on all games, and
@@ -82,9 +96,7 @@ the architecture itself due to the testing/training regime:
 - All games in ALE will be used, **even ones which standard DQNs perform poorly on**
   like Montezuma’s Revenge.
 
-
 ## Datasets:
-
 
 Currently no datasets, but it’s possible the dataset being created at
 [atarigrandchallenge.com](http://atarigrandchallenge.com/) will potentially be a useful comparison once
@@ -97,7 +109,6 @@ from real life, or natural ability etc).
 Akin to a dataset will be the benchmark framework itself. Since this is a
 reinforcement learning problem, the testing environment provides the data,
 rather than a static dataset.
-
 
 ## Relevant/Related Work
 
@@ -132,10 +143,3 @@ target for testing out RL architectures
 *Note: More Work to be added to, always check the chat for latest related work for now*
 
 
-**PS: Last few notes:**
-
-* Be Nice & Be Respectful.
-* Value other people's work, please reference them. Don't just copy & paste what you find elsewhere when it comes to sharing information.
-* Give constructive criticism, as in if you see something not working, or wrong, suggest an attempt to tackle resolving the issue.
-* Please Ask Questions: This is one big attempt to open up opportunity for everyone being able to contribute, if they can add value towards these research topics.
-* Also, keep in mind that most of the researchers that are opening these projects might have full-time work/research. If there is a specific question, try opening an issue, use the given open communication channels rather than direct contact.
