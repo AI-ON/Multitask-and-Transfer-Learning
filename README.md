@@ -41,7 +41,7 @@ We have a few different "threads" going on right now, so there are several diffe
 
 * **Be Kind** and **Be Respectful**
 * Value other people's work: please reference them. This also helps other people in the project find valuable prior work. Don't just copy & paste what you find elsewhere when it comes to sharing information.
-* Give constructive criticism. If you see something not working or wrong, [open an issue][new issue], or bring it up in the [chat][gitter]. Any ideas, practices, project direction or code are all open to any criticism. Try to avoid criticizing people or making things personal, but feel free to criticize code, ideas, project direction constructively. If you come with a proposed solution in hand, all the better!
+* Give constructive criticism. If you see something not working or wrong, [open an issue][new issue], or bring it up in the [chat][gitter]. Avoid criticizing people or making things personal, but feel free to criticize code, ideas, project direction constructively. If you come with a proposed solution in hand, all the better!
 * Please Ask Questions! An important part of this project is to open up the opportunity for everyone to contribute. We want anyone who wants to to be able to add value towards these research topics.
 * Keep in mind that most of the researchers that are opening these projects have full-time work/research. If there is a specific question, use the [gitter channel][gitter] or [open an issue][new issue] rather than directly emailing them.
 
