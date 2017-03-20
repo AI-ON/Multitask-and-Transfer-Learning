@@ -37,9 +37,10 @@ We have a few different "threads" going on right now, so there are several diffe
 
 ## Project Status:
 
+**See detailed status on the [project tracker](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects)**
+
 * Currently writing and testing the benchmarks for measuring performance.
 * Looking for people to review papers trawling for ideas, and to implement some existing architectures to benchmark their performance.
-* See detailed status on the [project tracker](https://github.com/AI-ON/Multitask-and-Transfer-Learning/projects)
 * Check the README in [AMTLB](./AMTLB) directory to learn more about the tool/ library used.
   - *"This is a library to test how a reinforcement learning architecture performs on all Atari games in OpenAI's gym. It performs two kinds of tests, one for transfer learning and one for multitask learning."*
 
