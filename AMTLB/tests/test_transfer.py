@@ -64,7 +64,6 @@ class TestTransferBenchmark(object):
  # .train  - low priority
   # returns a TrainingRun
 
-
 # TestRun
  # When the game is done, reset is called
  # Respects the max rounds per game
