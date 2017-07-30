@@ -13,10 +13,13 @@ from components.conv_gru import ConvGRU2D
 from components.stateless_conv_gru import StatelessConvGRU2D
 from components.embedding_conv2d import EmbeddingConv2D
 
+
 class PredictiveAutoencoder(Chain):
-    def __init__(self, action_space=18):
+    def __init__(self, environment):
         w = I.HeNormal()
         super(PredictiveAutoencoder, self).__init__()
+        self.action_meanings = environment.unwrapped.get_action_meanings()
+        self.action_space = 18
         with self.init_scope():
             self.conv1 = L.Convolution2D(
                 in_channels=3,
@@ -26,15 +29,15 @@ class PredictiveAutoencoder(Chain):
                 initialW=w,
             )
             self.embed_conv2d = EmbeddingConv2D(
-                embed_size=action_space,
+                embed_size=self.action_space,
                 in_channels=3,
-                out_channels=16,
+                out_channels=3,
                 ksize=8,
                 stride=4,
                 initialW=w,
             )
             self.conv2 = L.Convolution2D(
-                in_channels=32,
+                in_channels=19,
                 out_channels=32,
                 ksize=4,
                 stride=2,
@@ -61,7 +64,7 @@ class PredictiveAutoencoder(Chain):
             )
             self.linear2 = L.Linear(
                 256,
-                out_size=action_space,
+                out_size=self.action_space,
                 initialW=w,
             )
             self.deconv1 = L.Deconvolution2D(
@@ -101,29 +104,42 @@ class PredictiveAutoencoder(Chain):
 
 
 class Classifier(Chain):
-    def __init__(self, predictor, weight=0.5):
+    def __init__(self, predictor, weight=0.75):
         super(Classifier, self).__init__()
         with self.init_scope():
             self.predictor = predictor
             self.weight = float(weight)
             self.y_image = None
             self.y_action = None
+            self.image_mask = None
+
+    def action_meaning(self, act):
+        if act >= len(self.predictor.action_meanings):
+            return 'NOOP({})'.format(act)
+        else:
+            return self.predictor.action_meanings[act]
 
     def __call__(self, x_image, t_image, x_action, t_action):
         self.y_image, self.y_action = self.predictor(x_image, x_action)
-        print("Predicted action: {}, it was actually {}".format(
-            F.argmax(self.y_action, axis=1).data, t_action))
+
+        predicted_action = self.action_meaning(
+            F.argmax(self.y_action, axis=1).data[0])
+        real_action = self.action_meaning(t_action)
+        if predicted_action != real_action:
+            print("Predicted action:", predicted_action,
+                  "it was actually", real_action)
         image_loss = F.mean_squared_error(self.y_image, t_image)
+        self.error_mask = normalize_2d(F.squared_error(self.y_image, t_image))
         action_loss = F.softmax_cross_entropy(
             self.y_action,
             F.expand_dims(np.array(t_action, dtype=np.int32), axis=0),
         )
-        print('Image loss', image_loss, ', Action loss:', action_loss)
+        print('Image loss', image_loss.data, ', Action loss:', action_loss.data)
         return self.weight * image_loss + (1.0 - self.weight) * action_loss
 
 
 class PredictorAgent(object):
-    def __init__(self, save_dir,
+    def __init__(self, save_dir, environment,
                  name=None,
                  load_saved=True,
                  classifier_weight=0.5,
@@ -133,6 +149,10 @@ class PredictorAgent(object):
         self.backprop_rounds = backprop_rounds
 
         self.model = PredictiveAutoencoder(
+            # TODO: the environment shouldn't be passed in obviously
+            # We should own the action space descriptions or pull out
+            # all code that needs the descriptions
+            environment=environment,
         )
 
         self.classifier = Classifier(self.model, weight=classifier_weight)
@@ -177,6 +197,10 @@ class PredictorAgent(object):
         # different depth conventions
         return F.transpose(self._predicted_image[0])
 
+    @property
+    def error_mask(self):
+        return F.transpose(self.attention_mask)
+
     def describe_model(self):
         # TODO: fix this method
         graph = cg.build_computational_graph(model)
@@ -195,11 +219,12 @@ class PredictorAgent(object):
         execute'''
         self.i += 1
         # policy!
-        action = self.i % 6
+        action = random.randint(1, 6)
 
         self.loss += self.classifier(self.last_obs, obs, self.last_action, action)
         self._predicted_image = self.classifier.y_image
         self.predicted_action = self.classifier.y_action
+        self.attention_mask = self.classifier.error_mask
 
         self.last_action = action
         self.last_obs = obs
@@ -217,3 +242,11 @@ def to_one_hot(size, index):
     arr = np.zeros(size, dtype=np.int32)
     arr[index] = 1
     return arr
+
+
+def normalize_2d(x):
+    exp = F.exp(x[0])
+    sums = F.sum(F.sum(exp, axis=-1), axis=-1)
+    expanded = F.expand_dims(F.expand_dims(sums, axis=-1), axis=-1)
+    denominator = F.tile(expanded, (1, 160, 210))
+    return exp / denominator

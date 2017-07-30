@@ -25,14 +25,22 @@ def process_image(raw_image):
     expanded = F.expand_dims(transposed, 0) # Make a "batch size" of 1
     return expanded
 
+
 def to_image_format(arr):
     return (arr * 255).astype('int8')
+
+def to_err_mask_image(arr):
+    maxval = np.max(arr)
+    minval = np.min(arr)
+    compressed = (arr - minval) / (maxval - minval)
+    return (compressed * 255).astype('int8')
 
 
 def main(game_name, model_name):
     env = gym.make(game_name)
-    agent = PredictorAgent(SAVE_DIR, name=model_name)
-    viewer2 = rendering.SimpleImageViewer()
+    agent = PredictorAgent(SAVE_DIR, env, name=model_name)
+    prediction_view = rendering.SimpleImageViewer()
+    error_view = rendering.SimpleImageViewer()
 
     last_save_time = agent.save()
     reset = True
@@ -46,6 +54,8 @@ def main(game_name, model_name):
                 action = 0  # no-op
             env.render()
         raw_obs, reward, reset, _data = env.step(action)
+        if reward:
+            print('Non-zero reward:', reward)
         obs = process_image(raw_obs)
         action = agent(obs, reward)
         if action >= env.action_space.n:
@@ -53,7 +63,8 @@ def main(game_name, model_name):
 
         # Render things prediction
         env.render()
-        viewer2.imshow(to_image_format(agent.predicted_image.data))
+        prediction_view.imshow(to_image_format(agent.predicted_image.data))
+        error_view.imshow(to_err_mask_image(agent.error_mask.data))
 
         if time.time() - last_save_time > SAVE_INTERVAL_SECONDS:
             last_save_time = agent.save()
