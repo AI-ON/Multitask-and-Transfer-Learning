@@ -64,7 +64,7 @@ class Policy(nn.Module):
         self.saved_actions.append(SavedAction(action, state_value))
         a = probs.data[0]
         print('Chosen: {act} | NOOP: {a[0]:.02}\tFIRE: {a[1]:.02}\tRIGHT: {a[2]:.02}\tLEFT: {a[3]:.02}'.format(a=a, act=action.data[0,0]))
-        return action.data
+        return action, state_value
 
 
 def main():
@@ -89,18 +89,35 @@ class Runner:
     def run(self):
         for i_episode in count(1):
             state = self.env.reset()
+            action, state_value = self.model.select_action(state)
+            state, reward, done, _ = self.env.step(action.data[0, 0])
             for t in range(1000):
-                action = self.model.select_action(state)
-                state, reward, done, _ = self.env.step(action[0, 0])
-                print_action(action[0, 0])
+                last_value = state_value
+                last_action = action
+                action, state_value = self.model.select_action(state)
+                state, reward, done, _ = self.env.step(action.data[0, 0])
+                print_action(action.data[0, 0])
                 if self.render:
                     self.env.render()
-                self.model.rewards.append(reward)
+                    #self.model.rewards.append(reward)
+                self.learn_single(state_value, last_value, last_action, reward)
                 if done:
                     break
-            self.running_reward = (self.running_reward * self.gamma) + \
-                                  t * (1.0 - self.gamma)
-            self.finish_episode(i_episode)
+            #self.finish_episode(i_episode)
+
+    def learn_single(self, value, value_last, last_action, reward):
+        expected_value = self.gamma * value + reward # What value_last should have been if it was perfect
+
+        value_loss = F.smooth_l1_loss(expected_value, value_last)
+        print(value_loss.data)
+        last_action.reinforce(value_loss.data[0])
+
+        self.optimizer.zero_grad()
+        final_nodes = [value_loss, last_action]
+        gradients = [torch.ones(1).cuda(), None]
+        autograd.backward(final_nodes, gradients, retain_graph=True)
+        self.optimizer.step()
+        del last_action
 
     def finish_episode(self, ep):
         print('Episode', ep, 'finished')
