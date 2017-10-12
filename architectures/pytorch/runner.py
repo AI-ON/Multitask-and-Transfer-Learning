@@ -21,8 +21,9 @@ def maybe_cuda(x):
 
 def from_gym(x):
     t = torch.from_numpy(x).transpose(0, 2)
-    v = maybe_cuda(Variable(t))
-    return v.unsqueeze(0).float()
+    v = maybe_cuda(Variable(t)).float()
+    v = v/255.0
+    return v.unsqueeze(0)
 
 def print_action(act_num):
     if act_num == 0:
