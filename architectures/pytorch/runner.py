@@ -13,10 +13,15 @@ import torch.optim as optim
 import torch.autograd as autograd
 from torch.autograd import Variable
 
+def maybe_cuda(x):
+    if torch.cuda.is_available():
+        return x.cuda()
+    else:
+        return x
 
 def from_gym(x):
     t = torch.from_numpy(x).transpose(0, 2)
-    v = Variable(t).cuda()
+    v = maybe_cuda(Variable(t))
     return v.unsqueeze(0).float()
 
 def print_action(act_num):
@@ -77,7 +82,7 @@ def main():
 class Runner:
     def __init__(self, args, env_name):
         self.env = gym.make(env_name)
-        self.model = Policy(self.env.action_space.n).cuda()
+        self.model = maybe_cuda(Policy(self.env.action_space.n))
         self.optimizer = optim.Adam(self.model.parameters(), lr=3e-2)
 
         self.gamma = args.gamma
@@ -114,7 +119,7 @@ class Runner:
 
         self.optimizer.zero_grad()
         final_nodes = [value_loss, last_action]
-        gradients = [torch.ones(1).cuda(), None]
+        gradients = [maybe_cuda(torch.ones(1)), None]
         autograd.backward(final_nodes, gradients, retain_graph=True)
         self.optimizer.step()
         del last_action
@@ -134,10 +139,10 @@ class Runner:
         for (action, value), r in zip(saved_actions, rewards):
             reward = r - value.data[0, 0]
             action.reinforce(reward)
-            value_loss += F.smooth_l1_loss(value, Variable(torch.Tensor([r])).cuda())
+            value_loss += F.smooth_l1_loss(value, maybe_cuda(Variable(torch.Tensor([r]))))
         self.optimizer.zero_grad()
         final_nodes = [value_loss] + list(map(lambda p: p.action, saved_actions))
-        gradients = [torch.ones(1).cuda()] + [None] * len(saved_actions)
+        gradients = [maybe_cuda(torch.ones(1))] + [None] * len(saved_actions)
         autograd.backward(final_nodes, gradients)
         self.optimizer.step()
         del self.model.rewards[:]
