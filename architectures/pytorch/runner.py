@@ -49,7 +49,6 @@ class Policy(nn.Module):
         self.action_head = nn.Linear(256, action_space)
         self.value_head = nn.Linear(256, 1)
 
-        self.saved_actions = []
         self.rewards = []
 
     def forward(self, x):
@@ -66,7 +65,6 @@ class Policy(nn.Module):
     def select_action(self, state):
         probs, state_value = self(from_gym(state))
         action = probs.multinomial()
-        self.saved_actions.append(SavedAction(action, state_value))
         a = probs.data[0]
         print('Chosen: {act} | NOOP: {a[0]:.02}\tFIRE: {a[1]:.02}\tRIGHT: {a[2]:.02}\tLEFT: {a[3]:.02}'.format(a=a, act=action.data[0,0]))
         return action, state_value
@@ -83,7 +81,7 @@ class Runner:
     def __init__(self, args, env_name):
         self.env = gym.make(env_name)
         self.model = maybe_cuda(Policy(self.env.action_space.n))
-        self.optimizer = optim.Adam(self.model.parameters(), lr=3e-2)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-6)
 
         self.gamma = args.gamma
         self.render = args.render
@@ -104,11 +102,9 @@ class Runner:
                 print_action(action.data[0, 0])
                 if self.render:
                     self.env.render()
-                    #self.model.rewards.append(reward)
                 self.learn_single(state_value, last_value, last_action, reward)
                 if done:
                     break
-            #self.finish_episode(i_episode)
 
     def learn_single(self, value, value_last, last_action, reward):
         expected_value = self.gamma * value + reward # What value_last should have been if it was perfect
@@ -123,31 +119,6 @@ class Runner:
         autograd.backward(final_nodes, gradients, retain_graph=True)
         self.optimizer.step()
         del last_action
-
-    def finish_episode(self, ep):
-        print('Episode', ep, 'finished')
-        R = 0
-        saved_actions = self.model.saved_actions
-        value_loss = 0
-        rewards = []
-        for r in self.model.rewards[::-1]:
-            R = r + self.gamma * R
-            rewards.insert(0, R)
-        rewards = torch.Tensor(rewards)
-        rewards = (rewards - rewards.mean()) / \
-                  (rewards.std() + np.finfo(np.float32).eps)
-        for (action, value), r in zip(saved_actions, rewards):
-            reward = r - value.data[0, 0]
-            action.reinforce(reward)
-            value_loss += F.smooth_l1_loss(value, maybe_cuda(Variable(torch.Tensor([r]))))
-        self.optimizer.zero_grad()
-        final_nodes = [value_loss] + list(map(lambda p: p.action, saved_actions))
-        gradients = [maybe_cuda(torch.ones(1))] + [None] * len(saved_actions)
-        autograd.backward(final_nodes, gradients)
-        self.optimizer.step()
-        del self.model.rewards[:]
-        del self.model.saved_actions[:]
-
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
