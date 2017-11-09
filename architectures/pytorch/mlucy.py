@@ -37,13 +37,10 @@ class BreakoutPlayer(nn.Module):
         state_shape = list(from_gym(self.breakout.observation_space.low).shape)
         state_shape[1] *= 2 # we have one frame of history
         self.model = BreakoutActorCritic(state_shape, self.breakout.action_space.n)
-        self.opt = torch.optim.Adam(self.model.parameters(), lr=5e-7)
+        self.opt = torch.optim.Adam(self.model.parameters(), lr=1e-7)
         self.value_criterion = nn.MSELoss()
         self.gamma = 0.99
         self.last_action = None
-
-    def epsilon(self):
-        return 0.05 + 0.7*math.exp(-1*self.steps/2000)
 
     def setup(self):
         self.steps = self.steps + 1
@@ -58,10 +55,9 @@ class BreakoutPlayer(nn.Module):
         if self.last_action is not None:
             self.opt.zero_grad()
             ideal_value = self.last_reward + self.gamma*Variable(value.data)
-            if not self.last_action_fake:
-                value_diff = ideal_value - self.last_value
-                self.last_action.reinforce(value_diff.data)
-                self.last_action.backward(retain_graph=True)
+            value_diff = ideal_value - self.last_value
+            self.last_action.reinforce(value_diff.data)
+            self.last_action.backward(retain_graph=True)
             value_loss = self.value_criterion(self.last_value, ideal_value)
             value_loss.backward()
             self.opt.step()
@@ -69,14 +65,9 @@ class BreakoutPlayer(nn.Module):
         self.last_action = action
         self.last_value = value
 
-        self.last_action_fake = random.random() < self.epsilon()
         to_take = action.data[0][0]
-        if self.last_action_fake:
-            to_take = random.randrange(4)
 
         if self.steps % 3 == 0:
-            print('%d (fake: %d) (epsilon: %.02f)' %
-                  (self.steps, self.last_action_fake, self.epsilon()))
             print('Action: %s' % ['.', 'F', 'R', 'L'][to_take])
             print('Value: %s' % value.data[0][0])
             d = action_probs.data[0]
