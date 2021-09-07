@@ -1,6 +1,6 @@
 numpy==1.13.1
 olefile==0.44
-Pillow==4.2.1
+Pillow==8.3.2
 PyYAML==3.12
 six==1.10.0
 torch==0.2.0.post1
