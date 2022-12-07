@@ -1,5 +1,5 @@
 atari-py==0.1.1
-certifi==2017.4.17
+certifi==2022.12.7
 chainer==2.0.1
 chardet==3.0.4
 filelock==2.0.11
